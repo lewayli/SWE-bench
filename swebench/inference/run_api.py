@@ -42,6 +42,8 @@ MODEL_LIMITS = {
     "gpt-4-0613": 8_192,
     "gpt-4-1106-preview": 128_000,
     "gpt-4-0125-preview": 128_000,
+    "gpt-4o": 128_000,
+    "gpt-4o-2024-05-13": 128_000,
 }
 
 # The cost per token for each model input.
@@ -61,6 +63,8 @@ MODEL_COST_PER_INPUT = {
     "gpt-4-32k": 0.00006,
     "gpt-4-1106-preview": 0.00001,
     "gpt-4-0125-preview": 0.00001,
+    "gpt-4o": 0.0000025,
+    "gpt-4o-2024-05-13": 0.0000025,
 }
 
 # The cost per token for each model output.
@@ -80,6 +84,8 @@ MODEL_COST_PER_OUTPUT = {
     "gpt-4-32k": 0.00012,
     "gpt-4-1106-preview": 0.00003,
     "gpt-4-0125-preview": 0.00003,
+    "gpt-4o": 0.00001,
+    "gpt-4o-2024-05-13": 0.00001,
 }
 
 # used for azure
@@ -110,7 +116,7 @@ def calc_cost(model_name, input_tokens, output_tokens):
     return cost
 
 
-@retry(wait=wait_random_exponential(min=30, max=600), stop=stop_after_attempt(3))
+@retry(wait=wait_random_exponential(min=30, max=1200), stop=stop_after_attempt(100))
 def call_chat(model_name_or_path, inputs, use_azure, temperature, top_p, **model_args):
     """
     Calls the openai API to generate completions for the given inputs.
@@ -126,7 +132,7 @@ def call_chat(model_name_or_path, inputs, use_azure, temperature, top_p, **model
     system_messages = inputs.split("\n", 1)[0]
     user_message = inputs.split("\n", 1)[1]
     try:
-        if use_azure:
+        if use_azure and model_name_or_path in ENGINES:
             response = openai.chat.completions.create(
                 engine=ENGINES[model_name_or_path] if use_azure else None,
                 messages=[
@@ -206,8 +212,9 @@ def openai_inference(
     use_azure = model_args.pop("use_azure", False)
     if use_azure:
         openai.api_type = "azure"
-        openai.api_base = "https://pnlpopenai3.openai.azure.com/"
-        openai.api_version = "2023-05-15"
+        openai.azure_endpoint = "http://52.151.57.21:9999"
+        # openai.api_base = "https://pnlpopenai3.openai.azure.com/"
+        openai.api_version = "2024-09-01-preview"
     temperature = model_args.pop("temperature", 0.2)
     top_p = model_args.pop("top_p", 0.95 if temperature > 0 else 1)
     print(f"Using temperature={temperature}, top_p={top_p}")

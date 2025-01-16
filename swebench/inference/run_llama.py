@@ -180,6 +180,7 @@ def load_data(
         dataset = load_dataset(dataset_path, split=split)
     elif Path(dataset_path, split).exists():
         dataset = load_from_disk(Path(dataset_path) / split)
+        # dataset = load_from_disk(dataset_path)[split]
     else:
         dataset = load_dataset(dataset_path)[split]
     if peft_path is not None:
@@ -281,7 +282,8 @@ def generate(model, dataset, tokenizer, temperature, top_p, fileobj, model_name_
                     temperature= 1.0 if temperature == 0 else temperature,
                     top_p=top_p,
                     do_sample=False if temperature == 0 else True,
-                    max_new_tokens=200,
+                    # max_new_tokens=200,
+                    max_new_tokens=4096,
                     stopping_criteria=stopping_criteria,
                 )
                 total_len = output.shape[-1]

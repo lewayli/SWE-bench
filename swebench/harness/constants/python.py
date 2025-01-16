@@ -1,3 +1,10 @@
+class DefaultDict(dict):
+    def __getitem__(self, key):
+        try:
+            return super().__getitem__(key)
+        except KeyError:
+            return self.get('default', None)  
+
 # Constants - Testing Commands 
 TEST_PYTEST = "pytest --no-header -rA --tb=no -p no:cacheprovider"
 TEST_PYTEST_VERBOSE = "pytest -rA --tb=long -p no:cacheprovider"
@@ -27,7 +34,7 @@ SPECS_SKLEARN = {
         ],
         "test_cmd": TEST_PYTEST,
     }
-    for k in ["0.20", "0.21", "0.22"]
+    for k in ["0.20", "0.21", "0.22", "0.23", "0.24"]
 }
 SPECS_SKLEARN.update(
     {
@@ -38,7 +45,47 @@ SPECS_SKLEARN.update(
             "pip_packages": ["cython", "setuptools", "numpy", "scipy"],
             "test_cmd": TEST_PYTEST,
         }
-        for k in ["1.3", "1.4", "1.5", "1.6"]
+        for k in ["1.3", "1.4"]
+    }
+)
+
+SPECS_SKLEARN.update(
+    {
+        k: {
+            "python": "3.9",
+            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' 'setuptools<65' pytest joblib threadpoolctl",
+            "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
+            "pip_packages": ["cython==0.29.32", "numpy", "scipy"],
+            "test_cmd": TEST_PYTEST,
+        }
+        for k in ["1.2"]
+    }
+)
+
+SPECS_SKLEARN.update(
+    {
+        k: {
+            "python": "3.9",
+            "packages": "'numpy' 'scipy' 'cython==3.0.10' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl",
+            "install": "python -m pip install -v --no-build-isolation -e .",
+            "pip_packages": ["ninja", "meson-python"],
+            "test_cmd": TEST_PYTEST,
+        }
+        for k in ["1.5", "1.6"]
+    }
+)
+
+
+SPECS_SKLEARN.update(
+    {
+        k: {
+            "python": "3.8",
+            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' 'setuptools<65' pytest joblib threadpoolctl",
+            "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
+            "pip_packages": ["cython==0.29.32", "numpy", "scipy"],
+            "test_cmd": TEST_PYTEST,
+        }
+        for k in ["1.0", "1.1"]
     }
 )
 
@@ -868,6 +915,52 @@ SPECS_PYDICOM.update(
 
 SPECS_HUMANEVAL = {k: {"python": "3.9", "test_cmd": "python"} for k in ["1.0"]}
 
+SPECS_CONAN = DefaultDict({
+    k: {
+        "python": "3.9",
+        "install": "pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pytest", "bottle", "mock", "webtest", "jwt"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default', '2.10', '2.12']
+})
+
+SPECS_PYTORCH_VISION = DefaultDict({
+    k: {
+        "python": "3.9",
+        "install": "pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pytest", "torch"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default']
+})
+
+SPECS_PYTHON39 = DefaultDict({
+    k: {
+        "python": "3.9",
+        "install": "pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pytest"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default']
+})
+
+SPECS_PYTHON310 = DefaultDict({
+    k: {
+        "python": "3.10",
+        "install": "pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pytest"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default']
+})
+
+
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS_PY = {
     "astropy/astropy": SPECS_ASTROPY,
@@ -890,6 +983,16 @@ MAP_REPO_VERSION_TO_SPECS_PY = {
     "sqlfluff/sqlfluff": SPECS_SQLFLUFF,
     "swe-bench/humaneval": SPECS_HUMANEVAL,
     "sympy/sympy": SPECS_SYMPY,
+
+    "huggingface/datasets": SPECS_PYTHON310,
+    "encode/django-rest-framework": SPECS_PYTHON310,
+    "twisted/twisted": SPECS_PYTHON310,
+    "Cog-Creators/Red-DiscordBot": SPECS_PYTHON310,
+    "conan-io/conan": SPECS_CONAN,
+    "pytorch/vision": SPECS_PYTORCH_VISION,
+    "gradio-app/gradio": SPECS_PYTHON310,
+    "tensorflow/datasets": SPECS_PYTHON310,
+    "default": SPECS_PYTHON39,
 }
 
 # Constants - Repository Specific Installation Instructions

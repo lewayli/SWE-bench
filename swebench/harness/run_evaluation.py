@@ -502,7 +502,7 @@ def make_run_report(
         "unremoved_images": list(sorted(unremoved_images)),
         "schema_version": 2,
     }
-    report_file = Path(
+    report_file = RUN_EVALUATION_LOG_DIR / run_id / Path(
         list(predictions.values())[0][KEY_MODEL].replace("/", "__")
         + f".{run_id}"
         + ".json"
