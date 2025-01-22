@@ -457,7 +457,7 @@ SPECS_MATPLOTLIB.update(
             "pre_install": [
                 "apt-get -y update && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -y imagemagick ffmpeg libfreetype6-dev pkg-config texlive texlive-latex-extra texlive-fonts-recommended texlive-xetex texlive-luatex cm-super"
             ],
-            "pip_packages": ["pytest", "ipython"],
+            "pip_packages": ["'setuptools<60'","pytest", "ipython"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["3.1", "3.2", "3.3", "3.4"]
@@ -872,10 +872,10 @@ SPECS_PVLIB = {
         "python": "3.9",
         "install": "python -m pip install -e .[all]",
         "packages": "pandas scipy",
-        "pip_packages": ["jupyter", "ipython", "matplotlib", "pytest", "flake8"],
+        "pip_packages": ["'numpy<2.0'", "jupyter", "ipython", "matplotlib", "pytest", "flake8"],
         "test_cmd": TEST_PYTEST,
     }
-    for k in ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9"]
+    for k in ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", '0.10', '0.11']
 }
 
 SPECS_PYDICOM = {
