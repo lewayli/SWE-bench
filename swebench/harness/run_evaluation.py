@@ -44,6 +44,7 @@ from swebench.harness.docker_build import (
     setup_logger,
 )
 from swebench.harness.grading import get_eval_report
+from swebench.harness.reporting import make_run_report
 from swebench.harness.modal_eval import (
     run_instances_modal,
     validate_modal_credentials,
@@ -550,15 +551,6 @@ def main(
     predictions = get_predictions_from_file(predictions_path, dataset_name, split)
     predictions = {pred[KEY_INSTANCE_ID]: pred for pred in predictions}
 
-    if modal:
-        # run instances on Modal
-        if not dataset:
-            print("No instances to run.")
-        else:
-            validate_modal_credentials()
-            run_instances_modal(predictions, dataset, full_dataset, run_id, timeout)
-        return
-
     # get dataset from predictions
     dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predictions, run_id, rewrite_reports)
     full_dataset = load_swebench_dataset(dataset_name, split, instance_ids)
@@ -601,7 +593,7 @@ def main(
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
-    make_run_report(predictions, full_dataset, client, run_id)
+    return make_run_report(predictions, full_dataset, run_id, client)
 
 
 if __name__ == "__main__":
@@ -632,7 +624,7 @@ if __name__ == "__main__":
     parser.add_argument("--report_dir", type=str, default=".", help="Directory to write reports to")
 
     # Modal execution args
-    parser.add_argument("--modal", action="store_true", default=False, help="Run on Modal")
+    parser.add_argument("--modal", type=str2bool, default=False, help="Run on Modal")
 
     args = parser.parse_args()
     main(**vars(args))
