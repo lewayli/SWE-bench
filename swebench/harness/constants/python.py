@@ -24,13 +24,14 @@ TEST_SYMPY_VERBOSE = "bin/test -C --verbose"
 SPECS_SKLEARN = {
     k: {
         "python": "3.6",
-        "packages": "numpy scipy cython pytest pandas matplotlib",
+        "packages": "numpy scipy cython pytest pandas",
         "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
         "pip_packages": [
             "cython",
             "numpy==1.19.2",
             "setuptools",
             "scipy==1.5.2",
+            "matplotlib",
         ],
         "test_cmd": TEST_PYTEST,
     }
@@ -40,9 +41,9 @@ SPECS_SKLEARN.update(
     {
         k: {
             "python": "3.9",
-            "packages": "'numpy==1.19.2' 'scipy==1.5.2' 'cython==3.0.10' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl",
+            "packages": "'numpy==1.19.2' 'scipy==1.5.2' 'cython==3.0.10' pytest 'pandas<2.0.0' setuptools pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
-            "pip_packages": ["cython", "setuptools", "numpy", "scipy"],
+            "pip_packages": ["'matplotlib<3.9.0'", "cython", "setuptools", "numpy", "scipy"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.3", "1.4"]
@@ -53,9 +54,9 @@ SPECS_SKLEARN.update(
     {
         k: {
             "python": "3.9",
-            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' 'setuptools<65' pytest joblib threadpoolctl",
+            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'setuptools<65' pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
-            "pip_packages": ["cython==0.29.32", "numpy", "scipy"],
+            "pip_packages": ["'matplotlib<3.9.0'", "cython==0.29.32", "numpy", "scipy"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.2"]
@@ -66,23 +67,22 @@ SPECS_SKLEARN.update(
     {
         k: {
             "python": "3.9",
-            "packages": "'numpy' 'scipy' 'cython==3.0.10' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' setuptools pytest joblib threadpoolctl",
+            "packages": "'numpy' 'scipy' 'cython==3.0.10' 'pandas<2.0.0' setuptools pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-build-isolation -e .",
-            "pip_packages": ["ninja", "meson-python"],
+            "pip_packages": ["ninja", "meson-python", "'matplotlib<3.9.0'"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.5", "1.6"]
     }
 )
 
-
 SPECS_SKLEARN.update(
     {
         k: {
             "python": "3.8",
-            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'matplotlib<3.9.0' 'setuptools<65' pytest joblib threadpoolctl",
+            "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'setuptools<65' pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
-            "pip_packages": ["cython==0.29.32", "numpy", "scipy"],
+            "pip_packages": ["cython==0.29.32", "numpy", "scipy", "'matplotlib<3.9.0'"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.0", "1.1"]
@@ -457,7 +457,7 @@ SPECS_MATPLOTLIB.update(
             "pre_install": [
                 "apt-get -y update && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -y imagemagick ffmpeg libfreetype6-dev pkg-config texlive texlive-latex-extra texlive-fonts-recommended texlive-xetex texlive-luatex cm-super"
             ],
-            "pip_packages": ["'setuptools<60'","pytest", "ipython"],
+            "pip_packages": ["'setuptools<60'", "setuptools-scm==7.1.0", "pytest", "ipython"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["3.1", "3.2", "3.3", "3.4"]
@@ -937,6 +937,28 @@ SPECS_PYTORCH_VISION = DefaultDict({
     for k in [None, 'default']
 })
 
+SPECS_ACCELERATE = DefaultDict({
+    k: {
+        "python": "3.9",
+        "install": "pip install torch==2.5.0 ; pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pytest"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default']
+})
+
+SPECS_TORTOISE = DefaultDict({
+    k: {
+        "python": "3.9",
+        "install": "pip install -e .",
+        # "packages": "",
+        "pip_packages": ["pydantic", "pytest"],
+        "test_cmd": TEST_PYTEST,
+    }
+    for k in [None, 'default']
+})
+
 SPECS_PYTHON39 = DefaultDict({
     k: {
         "python": "3.9",
@@ -985,6 +1007,7 @@ MAP_REPO_VERSION_TO_SPECS_PY = {
     "sympy/sympy": SPECS_SYMPY,
 
     "huggingface/datasets": SPECS_PYTHON310,
+    "huggingface/accelerate": SPECS_ACCELERATE,
     "encode/django-rest-framework": SPECS_PYTHON310,
     "twisted/twisted": SPECS_PYTHON310,
     "Cog-Creators/Red-DiscordBot": SPECS_PYTHON310,
@@ -992,6 +1015,7 @@ MAP_REPO_VERSION_TO_SPECS_PY = {
     "pytorch/vision": SPECS_PYTORCH_VISION,
     "gradio-app/gradio": SPECS_PYTHON310,
     "tensorflow/datasets": SPECS_PYTHON310,
+    "tortoise/tortoise-orm": SPECS_TORTOISE,
     "default": SPECS_PYTHON39,
 }
 
