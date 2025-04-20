@@ -43,7 +43,7 @@ SPECS_SKLEARN.update(
             "python": "3.9",
             "packages": "'numpy==1.19.2' 'scipy==1.5.2' 'cython==3.0.10' pytest 'pandas<2.0.0' setuptools pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
-            "pip_packages": ["'matplotlib<3.9.0'", "cython", "setuptools", "numpy", "scipy"],
+            "pip_packages": ["'matplotlib<3.9.0'", "cython==3.0.10", "setuptools", "numpy==1.19.2", "scipy"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.3", "1.4"]
@@ -56,7 +56,7 @@ SPECS_SKLEARN.update(
             "python": "3.9",
             "packages": "'numpy==1.19.2' 'scipy==1.5.2' pytest 'pandas<2.0.0' 'setuptools<65' pytest joblib threadpoolctl",
             "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
-            "pip_packages": ["'matplotlib<3.9.0'", "cython==0.29.32", "numpy", "scipy"],
+            "pip_packages": ["'matplotlib<3.9.0'", "cython==0.29.32", "numpy==1.19.2", "scipy"],
             "test_cmd": TEST_PYTEST,
         }
         for k in ["1.2"]
